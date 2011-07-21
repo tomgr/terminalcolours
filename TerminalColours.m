@@ -30,26 +30,22 @@ static NSString* colourKeys[] = {
 {
 	id colour = nil;
 
-	if(index > 0)
+	if(index > 0) {
 		colour = [[self performSelector:@selector(profile)] valueForKey:colourKeys[index]];
+	}
 
 	return colour ?: [self TerminalColours_colorForANSIColor:index];
 }
 
-- (id)TerminalColours_colorForANSIColor:(unsigned int)index adjustedRelativeToColor:(id)bgColor;
+- (id)TerminalColours_colorForANSIColor:(unsigned int)index adjustedRelativeToColor:(id)arg2;
 {
 	id colour = nil;
 
-	if(index > 0)
+	if(index > 0) {
 		colour = [[self performSelector:@selector(profile)] valueForKey:colourKeys[index]];
-
-	if(colour)
-	{
-		colour = [self adjustedColorWithColor:colour withBackgroundColor:bgColor force:YES];
-		return colour;
 	}
-	else
-		return [self TerminalColours_colorForANSIColor:index adjustedRelativeToColor:bgColor];
+
+	return colour ?: [self TerminalColours_colorForANSIColor:index adjustedRelativeToColor:arg2];
 }
 @end
 
@@ -152,11 +148,10 @@ static NSString* colourKeys[] = {
 		[configureButton setBezelStyle:NSRoundedBezelStyle];
 		[[configureButton cell] setControlSize:NSSmallControlSize];
 		[configureButton setTitle:@"More…"];
-		[configureButton setFont:[NSFont systemFontOfSize:11]];
 		[configureButton sizeToFit];
 		[configureButton setTarget:[TerminalColours sharedInstance]];
 		[configureButton setAction:@selector(orderFrontColourConfiguration:)];
-		[configureButton setFrameOrigin:NSMakePoint(233, 128)];
+		[configureButton setFrameOrigin:NSMakePoint(200, 172)];
 		[textPrefsView addSubview:configureButton];
 	}
 	[configureButton release];
@@ -168,9 +163,9 @@ static NSString* colourKeys[] = {
 {
 	[NSClassFromString(@"TTProfile") jr_swizzleMethod:@selector(valueForKey:) withMethod:@selector(TerminalColours_TTProfile_valueForKey:) error:NULL];
 	[NSClassFromString(@"TTProfile") jr_swizzleMethod:@selector(setValue:forKey:) withMethod:@selector(TerminalColours_TTProfile_setValue:forKey:) error:NULL];
-	[NSClassFromString(@"TTView") jr_swizzleMethod:@selector(colorForANSIColor:adjustedRelativeToColor:) withMethod:@selector(TerminalColours_colorForANSIColor:adjustedRelativeToColor:) error:NULL];
 
 	[NSClassFromString(@"TTView") jr_swizzleMethod:@selector(colorForANSIColor:) withMethod:@selector(TerminalColours_colorForANSIColor:) error:NULL];
+	[NSClassFromString(@"TTView") jr_swizzleMethod:@selector(colorForANSIColor:adjustedRelativeToColor:) withMethod:@selector(TerminalColours_colorForANSIColor:adjustedRelativeToColor:) error:NULL];
 	[NSClassFromString(@"TTAppPrefsController") jr_swizzleMethod:@selector(windowDidLoad) withMethod:@selector(TerminalColours_TTAppPrefsController_windowDidLoad) error:NULL];
 	[NSClassFromString(@"TTProfile") jr_swizzleMethod:@selector(propertyListRepresentation) withMethod:@selector(TerminalColours_propertyListRepresentation) error:NULL];
 }
