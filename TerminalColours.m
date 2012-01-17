@@ -21,6 +21,8 @@ static NSString* colourKeys[] = {
 	@"brightWhiteColour",
 };
 
+static NSUInteger COLOUR_COUNT = 17;
+
 @interface NSObject (TTAppPrefsController_Methods)
 + (id)sharedPreferencesController;
 @end
@@ -30,7 +32,7 @@ static NSString* colourKeys[] = {
 {
 	id colour = nil;
 
-	if(index > 0) {
+	if(index > 0 && index < COLOUR_COUNT) {
 		colour = [[self performSelector:@selector(profile)] valueForKey:colourKeys[index]];
 	}
 
@@ -41,7 +43,7 @@ static NSString* colourKeys[] = {
 {
 	id colour = nil;
 
-	if(index > 0) {
+	if(index > 0 && index < COLOUR_COUNT) {
 		colour = [[self performSelector:@selector(profile)] valueForKey:colourKeys[index]];
 	}
 
